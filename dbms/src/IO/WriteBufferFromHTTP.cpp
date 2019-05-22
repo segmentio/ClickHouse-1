@@ -19,18 +19,19 @@ WriteBufferFromHTTP::WriteBufferFromHTTP(
 
     LOG_TRACE((&Logger::get("WriteBufferToHTTP")), "Sending request to " << uri.toString());
 
-    try
-    {
-        ostr = &session->sendRequest(request);
-    }
-    catch ( const Poco::Net::Exception & e )
-    {
-        log = &Logger::get("IOHTTP");
-        LOG_DEBUG(log, "reason: " << e.displayText());
-        &session->reset();
-        // Retry once
-        ostr = &session->sendRequest(request);
-    }
+    ostr = &session->sendRequest(request);
+    /* try */
+    /* { */
+    /*     ostr = &session->sendRequest(request); */
+    /* } */
+    /* catch ( const Poco::Net::Exception & e ) */
+    /* { */
+    /*     log = &Logger::get("IOHTTP"); */
+    /*     LOG_DEBUG(log, "reason: " << e.displayText()); */
+    /*     &session->reset(); */
+    /*     // Retry once */
+    /*     ostr = &session->sendRequest(request); */
+    /* } */
 }
 
 void WriteBufferFromHTTP::finalize()

@@ -70,17 +70,19 @@ namespace detail
 
             LOG_TRACE((&Logger::get("ReadWriteBufferFromHTTP")), "Sending request to " << uri.toString());
 
-            try
-            {
-                auto & stream_out = session->sendRequest(request);
-            }
-            catch ( const Poco::Net::Exception & e )
-            {
-                log = &Logger::get("IOHTTP");
-                LOG_DEBUG(log, "reason: " << e.displayText());
-                &session->reset();
-                // Retry once
-                stream_out = session->sendRequest(request);
+            auto & stream_out = session->sendRequest(request);
+
+            /* try */
+            /* { */
+            /*     auto & stream_out = session->sendRequest(request); */
+            /* } */
+            /* catch (const Poco::Net::Exception & e) */
+            /* { */
+            /*     log = &Logger::get("IOHTTP"); */
+            /*     LOG_DEBUG(log, "reason: " << e.displayText()); */
+            /*     &session->reset(); */
+            /*     // Retry once */
+            /*     stream_out = session->sendRequest(request); */
             }
 
             if (out_stream_callback)

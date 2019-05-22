@@ -10,6 +10,7 @@
 #include <Poco/Net/HTTPClientSession.h>
 #include <Poco/Net/HTTPRequest.h>
 #include <Poco/Net/HTTPResponse.h>
+#include <Poco/Net/NetException.h>
 #include <Poco/URI.h>
 #include <Poco/Version.h>
 #include <Common/DNSResolver.h>
@@ -69,7 +70,18 @@ namespace detail
 
             LOG_TRACE((&Logger::get("ReadWriteBufferFromHTTP")), "Sending request to " << uri.toString());
 
-            auto & stream_out = session->sendRequest(request);
+            try
+            {
+                auto & stream_out = session->sendRequest(request);
+            }
+            catch ( const Poco::Net::Exception & e )
+            {
+                log = &Logger::get("IOHTTP");
+                LOG_DEBUG(log, "reason: " << e.displayText());
+                &session->reset();
+                // Retry once
+                stream_out = session->sendRequest(request);
+            }
 
             if (out_stream_callback)
                 out_stream_callback(stream_out);
